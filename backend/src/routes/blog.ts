@@ -102,8 +102,19 @@ blogRouter.get('/bulk', async (c) => {
   }).$extends(withAccelerate());
 
   try {
-    const blogs = await prisma.post.findMany();
-    return c.json(blogs);
+    const blogs = await prisma.post.findMany({
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true
+          }
+        }
+      }
+    });
+    return c.json({blogs});
   } catch (e) {
     c.status(403);
     return c.json({ error: "error while getting blogs" });
@@ -121,9 +132,19 @@ blogRouter.get('/:id', async (c) => {
     const blog = await prisma.post.findUnique({
       where: {
         id
+      },
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true
+          }
+        }
       }
     });
-    return c.json(blog);
+    return c.json({blog});
   } catch (e) {
     c.status(403);
     return c.json({ error: "error while getting blog" });

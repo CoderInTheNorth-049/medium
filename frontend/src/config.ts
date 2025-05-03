@@ -1,0 +1,1 @@
+export const BACKEND_URL = "https://backend.mulaniarif3032004.workers.dev"
